@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-import ToDo from './components/todo-component/todo.component.jsx'
+import ToDo from "./components/todo-component/todo.component.jsx";
 function App() {
   return (
     <div className="App">
