@@ -1,4 +1,5 @@
 import React from "react";
+import { nanoid } from 'nanoid'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -12,14 +13,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ToDoItem from '../todoItem-component/todoItem.component'
-
-const fakeList = [{ id: 1, taskTitle: "Item1", taskContent: "todoItem1", taskStatus: "done" }, { id: 2, taskTitle: "Item2", taskContent: "todoItem2", taskStatus: "Doing" }]
+import Save from '@mui/icons-material/Save';
+import Close from '@mui/icons-material/Close';
 
 
 function Todo() {
 
   const [open, setOpen] = React.useState(false);
-
+  const [todoList, setTodoList] = React.useState([{ id: 1, taskTitle: "Item1", taskContent: "todoItem1", taskStatus: "done" }, { id: 2, taskTitle: "Item2", taskContent: "todoItem2", taskStatus: "Doing" }])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,7 +31,7 @@ function Todo() {
 
 
   };
-  const listToDos = fakeList.map(todoItem =>
+  const listToDos = todoList.map(todoItem =>
     <ToDoItem
       key={todoItem.id}
       taskTitle={todoItem.taskTitle}
@@ -41,7 +42,7 @@ function Todo() {
 
   return (
     <div className="ToDo">
-      <AddTodoDialog open={open} onClose={handleClose}></AddTodoDialog>
+      <AddTodoDialog open={open} onClose={handleClose} todoList={todoList} setTodoList={setTodoList}></AddTodoDialog>
       <Card style={{ backgroundColor: "#DEF2F1" }}>
         <CardContent>
           {listToDos}
@@ -70,13 +71,24 @@ function Todo() {
 }
 
 function AddTodoDialog(props) {
-  const { onClose, open } = props;
-
+  const { onClose, open, todoList, setTodoList } = props;
+  const [taskTitle, setTaskTitle] = React.useState('');
+  const [taskContent, setTaskContent] = React.useState('');
   const handleClose = () => {
     onClose();
   };
 
+  const saveTodo = () => {
+    const newTodo = {
+      id: nanoid(),
+      taskTitle: taskTitle,
+      taskContent: taskContent,
+      taskStatus: 'To-Do',
+    }
 
+    setTodoList([...todoList, newTodo])
+
+  }
 
 
   return (
@@ -89,21 +101,42 @@ function AddTodoDialog(props) {
       <DialogTitle>Add Todo</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
+          Please fill the information about your new todo task.
         </DialogContentText>
 
         <TextField
           autoFocus
           margin="dense"
-          id="name"
-          label="Email Address"
-          type="email"
+          id="taskTitle"
+          label="Todo Title"
+          type="text"
           fullWidth
           variant="standard"
+          required
+          onChange={(e) => {
+            setTaskTitle(e.target.value);
+          }}
         />
+        <TextField
+          autoFocus
+          margin="dense"
+          id="taskContent"
+          label="Todo Content"
+          type="text"
+          fullWidth
+          variant="standard"
+          required
+
+          onChange={(e) => {
+            setTaskContent(e.target.value);
+          }}
+        />
+
+
       </DialogContent>
       <DialogActions>
+        <Button size="small" color="primary" variant="contained" endIcon={<Save />} onClick={saveTodo}>Save</Button>
+        <Button size="small" color="error" variant="contained" endIcon={<Close />} onClick={handleClose}>Close</Button>
 
       </DialogActions>
     </Dialog>
@@ -113,6 +146,8 @@ function AddTodoDialog(props) {
 AddTodoDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  todoList: PropTypes.array.isRequired,
+  setTodoList: PropTypes.func.isRequired
 
 };
 
