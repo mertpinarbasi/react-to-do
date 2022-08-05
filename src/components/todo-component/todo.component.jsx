@@ -19,9 +19,15 @@ import Close from "@mui/icons-material/Close";
 function Todo() {
   const [open, setOpen] = React.useState(false);
   const [todoList, setTodoList] = React.useState([
-    { id: 1, taskTitle: "Item1", taskContent: "todoItem1", taskStatus: "done" },
+    { id: nanoid(), taskTitle: "Item1", taskContent: "todoItem1", taskStatus: "Completed" },
     {
-      id: 2,
+      id: nanoid(),
+      taskTitle: "Item2",
+      taskContent: "todoItem2",
+      taskStatus: "Doing",
+    },
+    {
+      id: nanoid(),
       taskTitle: "Item2",
       taskContent: "todoItem2",
       taskStatus: "Doing",
@@ -35,12 +41,39 @@ function Todo() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const deleteTodo = (id) => {
+
+    setTodoList(todoList.filter(todoItem => todoItem.id !== id))
+
+  }
+  const modifyTodo = (id, taskTitle, taskStatus, taskContent) => {
+
+    setTodoList(() => {
+      const updatedTodoList = todoList.map((todoItem) => {
+        if (todoItem.id === id) {
+          return { ...todoItem, taskTitle: taskTitle, taskStatus: taskStatus, taskContent }
+        }
+        else
+          return todoItem
+      })
+
+      return updatedTodoList
+
+    })
+
+
+  }
   const listToDos = todoList.map((todoItem) => (
     <ToDoItem
+
       key={todoItem.id}
+      id={todoItem.id}
       taskTitle={todoItem.taskTitle}
       taskContent={todoItem.taskContent}
       taskStatus={todoItem.taskStatus}
+      deleteTodo={deleteTodo}
+      modifyTodo={modifyTodo}
     ></ToDoItem>
   ));
 
