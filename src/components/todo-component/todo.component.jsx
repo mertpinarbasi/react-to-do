@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import { Stack } from "@mui/material";
+import { CardHeader, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
@@ -93,6 +93,9 @@ function Todo() {
         setTodoList={setTodoList}
       ></AddTodoDialog>
       <Card style={{ backgroundColor: "#DEF2F1" }}>
+        <CardHeader>
+
+        </CardHeader>
         <CardContent>{listToDos}</CardContent>
         <Stack
           direction="row"

@@ -34,14 +34,29 @@ function ModifyTodoDialog(props) {
 
   };
 
+  const handleCloseThenClear = () => {
+    handleClose();
+    clearModificationOnClose();
+  }
+
+  const clearModificationOnClose = () => {
+    console.log("worked close")
+    setTaskTitle(todoItem.taskTitle);
+    setTaskContent(todoItem.taskContent);
+    setTaskStatus(todoItem.taskStatus);
+  }
+
 
   return (
     <Dialog
       maxWidth="lg"
       fullWidth
-      onClose={handleClose}
+      onClose={handleCloseThenClear}
       open={open}
       scroll="body"
+
+
+
     >
       <DialogTitle>Modify Todo</DialogTitle>
       <DialogContent>
@@ -109,7 +124,7 @@ function ModifyTodoDialog(props) {
           color="error"
           variant="contained"
           endIcon={<Close />}
-          onClick={handleClose}
+          onClick={handleCloseThenClear}
         >
           Close
         </Button>
