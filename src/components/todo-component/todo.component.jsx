@@ -18,21 +18,7 @@ import Close from "@mui/icons-material/Close";
 
 function Todo() {
   const [open, setOpen] = React.useState(false);
-  const [todoList, setTodoList] = React.useState([
-    { id: nanoid(), taskTitle: "Item1", taskContent: "todoItem1", taskStatus: "Completed" },
-    {
-      id: nanoid(),
-      taskTitle: "Item2",
-      taskContent: "todoItem2",
-      taskStatus: "Doing",
-    },
-    {
-      id: nanoid(),
-      taskTitle: "Item2",
-      taskContent: "todoItem2",
-      taskStatus: "Doing",
-    },
-  ]);
+  const [todoList, setTodoList] = React.useState();
 
   const handleClickOpen = () => {
     setOpen(true);
