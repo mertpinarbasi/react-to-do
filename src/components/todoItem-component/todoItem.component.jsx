@@ -31,12 +31,8 @@ function ModifyTodoDialog(props) {
 
   const handleClose = () => {
     onClose();
-    console.log(taskTitle, taskContent)
+
   };
-
-
-
-
 
 
   return (
@@ -104,7 +100,7 @@ function ModifyTodoDialog(props) {
           color="primary"
           variant="contained"
           endIcon={<Save />}
-          onClick={() => { modifyTodo(id, taskTitle, taskStatus, taskContent) }}
+          onClick={() => { modifyTodo(id, taskTitle, taskStatus, taskContent); handleClose() }}
         >
           Save
         </Button>

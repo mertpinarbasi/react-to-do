@@ -15,10 +15,22 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ToDoItem from "../todoItem-component/todoItem.component";
 import Save from "@mui/icons-material/Save";
 import Close from "@mui/icons-material/Close";
-
+import { appAxios } from '../../utils/axios'
 function Todo() {
+
   const [open, setOpen] = React.useState(false);
-  const [todoList, setTodoList] = React.useState();
+  const [todoList, setTodoList] = React.useState(null);
+
+
+  React.useEffect(() => {
+    appAxios.get('/todoList').then((response) => {
+      setTodoList(response.data);
+    });
+  }, []);
+
+  if (!todoList) return null;
+
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,23 +42,32 @@ function Todo() {
 
   const deleteTodo = (id) => {
 
-    setTodoList(todoList.filter(todoItem => todoItem.id !== id))
+
+    appAxios.delete(`/todoList/${id}`).then(() => {
+      setTodoList(todoList.filter(todoItem => todoItem.id !== id))
+    })
+
 
   }
   const modifyTodo = (id, taskTitle, taskStatus, taskContent) => {
 
-    setTodoList(() => {
-      const updatedTodoList = todoList.map((todoItem) => {
-        if (todoItem.id === id) {
-          return { ...todoItem, taskTitle: taskTitle, taskStatus: taskStatus, taskContent }
-        }
-        else
-          return todoItem
+
+    appAxios.put(`/todoList/${id}`, { id: id, taskTitle: taskTitle, taskStatus: taskStatus, taskContent: taskContent })
+      .then(() => {
+        setTodoList(() => {
+          const updatedTodoList = todoList.map((todoItem) => {
+            if (todoItem.id === id) {
+              return { ...todoItem, taskTitle: taskTitle, taskStatus: taskStatus, taskContent }
+            }
+            else
+              return todoItem
+          })
+
+          return updatedTodoList
+
+        })
       })
 
-      return updatedTodoList
-
-    })
 
 
   }
@@ -110,8 +131,11 @@ function AddTodoDialog(props) {
       taskContent: taskContent,
       taskStatus: "To-Do",
     };
+    appAxios.post('/todoList', newTodo).then(() => {
+      setTodoList([...todoList, newTodo]);
+      handleClose();
+    });
 
-    setTodoList([...todoList, newTodo]);
   };
 
   return (
