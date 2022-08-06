@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
@@ -26,7 +26,7 @@ function Todo() {
   const [todoList, setTodoList] = React.useState(null);
   const [searchedTodoList, setSearchedTodoList] = React.useState(null);
   const [currentDisplayedTodoList, setCurrentDisplayedTodoList] = React.useState(null);
-
+  const searchInput = React.useRef(null);
 
 
   React.useEffect(() => {
@@ -36,6 +36,7 @@ function Todo() {
       setCurrentDisplayedTodoList(response.data);
     });
   }, []);
+
 
   if (!todoList) return null;
 
@@ -80,7 +81,6 @@ function Todo() {
 
 
   }
-
   const searchFilter = (searchText) => {
     const searchFilteredList = todoList.filter((todoItem) =>
       todoItem.taskTitle.toLowerCase().includes(searchText.toLowerCase())
@@ -98,6 +98,8 @@ function Todo() {
 
 
   }
+
+
   const listToDos = currentDisplayedTodoList.map((todoItem) => (
     <ToDoItem
 
@@ -133,6 +135,8 @@ function Todo() {
             label="Search Todo"
             variant="outlined"
             autoFocus
+            inputRef={searchInput}
+
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -141,8 +145,13 @@ function Todo() {
               ),
               endAdornment:
                 (
+
                   <InputAdornment position="end">
-                    <Close />
+                    <IconButton
+                      onClick={() => { searchInput.current.value = ""; searchFilter("") }
+                      }
+                    >   <Close /></IconButton>
+
                   </InputAdornment>
                 ),
             }}
