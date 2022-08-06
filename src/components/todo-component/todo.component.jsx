@@ -26,7 +26,7 @@ function Todo() {
   const [todoList, setTodoList] = React.useState(null);
   const [searchedTodoList, setSearchedTodoList] = React.useState(null);
   const [currentDisplayedTodoList, setCurrentDisplayedTodoList] = React.useState(null);
-  const searchInput = React.useRef(null);
+  let searchInput = React.useRef(null);
 
 
   React.useEffect(() => {
@@ -42,8 +42,9 @@ function Todo() {
   }, [todoList])
 
   React.useEffect(() => {
+
     setCurrentDisplayedTodoList(searchedTodoList)
-  }, [searchInput])
+  }, [searchedTodoList])
 
   if (!todoList) return null;
 
@@ -89,6 +90,7 @@ function Todo() {
 
   }
   const searchFilter = (searchText) => {
+
     const searchFilteredList = todoList.filter((todoItem) =>
       todoItem.taskTitle.toLowerCase().includes(searchText.toLowerCase())
 
@@ -184,14 +186,14 @@ function Todo() {
               size="medium"
               variant="contained"
               color="primary"
-              onClick={handleClickOpen}
+              onClick={() => { handleClickOpen(); searchInput = ""; }}
             >
               Add Todo
             </Button>
           </CardActions>
         </Stack>
       </Card>
-    </div>
+    </div >
   );
 }
 
@@ -209,6 +211,7 @@ function AddTodoDialog(props) {
     setTaskContent("");
     setErrorTextTaskContent("");
     setErrorTextTaskTitle("");
+
 
   }
 
@@ -233,7 +236,7 @@ function AddTodoDialog(props) {
     if (taskContent === "") {
       setErrorTextTaskContent("Please enter an information about the task");
     }
-    if (taskContent && taskTitle) {
+    if (taskContent.length > 0 && taskTitle.length > 0) {
       setErrorTextTaskTitle("");
       setErrorTextTaskContent("");
 
