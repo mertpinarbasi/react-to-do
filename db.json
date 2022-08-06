@@ -1,7 +1,7 @@
 {
   "todoList": [
     {
-      "id": 1,
+      "id": "9xXKxuIPPso40UJteL0syasda1",
       "taskTitle": "TaskTitle1",
       "taskStatus": "Doing",
       "taskContent": "TaskContent1"
@@ -10,6 +10,12 @@
       "id": "9xXKxuIPPso40UJteL0sy",
       "taskTitle": "TaskTitle2",
       "taskContent": "TaskContent3",
+      "taskStatus": "To-Do"
+    },
+    {
+      "id": "XMJ_ijsxDVDcUmiCSW2OV",
+      "taskTitle": "Learn React ",
+      "taskContent": "React Information ",
       "taskStatus": "To-Do"
     }
   ]

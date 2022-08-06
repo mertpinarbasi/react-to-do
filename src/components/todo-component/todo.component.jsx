@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import { CardHeader, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
@@ -15,16 +15,25 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ToDoItem from "../todoItem-component/todoItem.component";
 import Save from "@mui/icons-material/Save";
 import Close from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
 import { appAxios } from '../../utils/axios'
+import InputAdornment from '@mui/material/InputAdornment';
+
+
 function Todo() {
 
   const [open, setOpen] = React.useState(false);
   const [todoList, setTodoList] = React.useState(null);
+  const [searchedTodoList, setSearchedTodoList] = React.useState(null);
+  const [currentDisplayedTodoList, setCurrentDisplayedTodoList] = React.useState(null);
+
 
 
   React.useEffect(() => {
     appAxios.get('/todoList').then((response) => {
       setTodoList(response.data);
+      setSearchedTodoList(response.data);
+      setCurrentDisplayedTodoList(response.data);
     });
   }, []);
 
@@ -71,7 +80,25 @@ function Todo() {
 
 
   }
-  const listToDos = todoList.map((todoItem) => (
+
+  const searchFilter = (searchText) => {
+    const searchFilteredList = todoList.filter((todoItem) =>
+      todoItem.taskTitle.toLowerCase().includes(searchText.toLowerCase())
+
+    )
+
+    setSearchedTodoList(searchFilteredList);
+    if (searchText.length == 0) {
+      setCurrentDisplayedTodoList(todoList);
+    }
+    else {
+      setCurrentDisplayedTodoList(searchedTodoList);
+
+    }
+
+
+  }
+  const listToDos = currentDisplayedTodoList.map((todoItem) => (
     <ToDoItem
 
       key={todoItem.id}
@@ -84,6 +111,7 @@ function Todo() {
     ></ToDoItem>
   ));
 
+
   return (
     <div className="ToDo">
       <AddTodoDialog
@@ -93,9 +121,41 @@ function Todo() {
         setTodoList={setTodoList}
       ></AddTodoDialog>
       <Card style={{ backgroundColor: "#DEF2F1" }}>
-        <CardHeader>
 
-        </CardHeader>
+        <CardContent>
+
+
+          <TextField
+            color="primary"
+            margin="dense"
+            fullWidth
+            id="search-todo"
+            label="Search Todo"
+            variant="outlined"
+            autoFocus
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              endAdornment:
+                (
+                  <InputAdornment position="end">
+                    <Close />
+                  </InputAdornment>
+                ),
+            }}
+
+            onChange={(e) => {
+              searchFilter(e.target.value);
+            }}
+
+          />
+
+        </CardContent>
+
+
         <CardContent>{listToDos}</CardContent>
         <Stack
           direction="row"
