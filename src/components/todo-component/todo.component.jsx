@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import { IconButton, Stack } from "@mui/material";
+import { FormControl, IconButton, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
@@ -37,6 +37,13 @@ function Todo() {
     });
   }, []);
 
+  React.useEffect(() => {
+    setCurrentDisplayedTodoList(todoList)
+  }, [todoList])
+
+  React.useEffect(() => {
+    setCurrentDisplayedTodoList(searchedTodoList)
+  }, [searchInput])
 
   if (!todoList) return null;
 
@@ -192,7 +199,21 @@ function AddTodoDialog(props) {
   const { onClose, open, todoList, setTodoList } = props;
   const [taskTitle, setTaskTitle] = React.useState("");
   const [taskContent, setTaskContent] = React.useState("");
+
+  const [errorTextTaskTitle, setErrorTextTaskTitle] = React.useState();
+  const [errorTextTaskContent, setErrorTextTaskContent] = React.useState();
+
+
+  const clearDialogBeforeClose = () => {
+    setTaskTitle("");
+    setTaskContent("");
+    setErrorTextTaskContent("");
+    setErrorTextTaskTitle("");
+
+  }
+
   const handleClose = () => {
+    clearDialogBeforeClose();
     onClose();
   };
 
@@ -203,11 +224,25 @@ function AddTodoDialog(props) {
       taskContent: taskContent,
       taskStatus: "To-Do",
     };
-    appAxios.post('/todoList', newTodo).then(() => {
-      setTodoList([...todoList, newTodo]);
-      handleClose();
-    });
 
+
+    if (taskTitle === "") {
+      setErrorTextTaskTitle("Please enter a title.");
+
+    }
+    if (taskContent === "") {
+      setErrorTextTaskContent("Please enter an information about the task");
+    }
+    if (taskContent && taskTitle) {
+      setErrorTextTaskTitle("");
+      setErrorTextTaskContent("");
+
+      appAxios.post('/todoList', newTodo).then(() => {
+        setTodoList([...todoList, newTodo]);
+
+        handleClose();
+      });
+    }
   };
 
   return (
@@ -223,33 +258,41 @@ function AddTodoDialog(props) {
         <DialogContentText>
           Please fill the information about your new todo task.
         </DialogContentText>
+        <FormControl
+          fullWidth
+          required>
 
-        <TextField
-          autoFocus
-          margin="dense"
-          id="taskTitle"
-          label="Todo Title"
-          type="text"
-          fullWidth
-          variant="standard"
-          required
-          onChange={(e) => {
-            setTaskTitle(e.target.value);
-          }}
-        />
-        <TextField
-          autoFocus
-          margin="dense"
-          id="taskContent"
-          label="Todo Content"
-          type="text"
-          fullWidth
-          variant="standard"
-          required
-          onChange={(e) => {
-            setTaskContent(e.target.value);
-          }}
-        />
+
+          <TextField
+
+            autoFocus
+            margin="dense"
+            id="taskTitle"
+            label="Todo Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+            helperText={errorTextTaskTitle}
+            error={errorTextTaskTitle}
+            onChange={(e) => { setTaskTitle(e.target.value) }}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="taskContent"
+            label="Todo Content"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+            helperText={errorTextTaskContent}
+            error={errorTextTaskContent}
+            onChange={(e) => {
+              setTaskContent(e.target.value);
+            }}
+          />
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button
@@ -258,6 +301,7 @@ function AddTodoDialog(props) {
           variant="contained"
           endIcon={<Save />}
           onClick={saveTodo}
+          type="submit"
         >
           Save
         </Button>
