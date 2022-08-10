@@ -28,10 +28,9 @@ function ModifyTodoDialog(props) {
   const [taskContent, setTaskContent] = React.useState(todoItem.taskContent);
   const [taskStatus, setTaskStatus] = React.useState(todoItem.taskStatus);
 
-
+  // useCallBack
   const handleClose = () => {
     onClose();
-
   };
 
   const handleCloseThenClear = () => {
@@ -39,98 +38,97 @@ function ModifyTodoDialog(props) {
     clearModificationOnClose();
   }
 
-  const clearModificationOnClose = () => {
-    console.log("worked close")
-    setTaskTitle(todoItem.taskTitle);
-    setTaskContent(todoItem.taskContent);
-    setTaskStatus(todoItem.taskStatus);
-  }
+  const clearModificationOnClose = ()
+  setTaskTitle(todoItem.taskTitle);
+  setTaskContent(todoItem.taskContent);
+  setTaskStatus(todoItem.taskStatus);
+}
 
 
-  return (
-    <Dialog
-      maxWidth="lg"
-      fullWidth
-      onClose={handleCloseThenClear}
-      open={open}
-      scroll="body"
+return (
+  <Dialog
+    maxWidth="lg"
+    fullWidth
+    onClose={handleCloseThenClear}
+    open={open}
+    scroll="body"
 
 
 
-    >
-      <DialogTitle>Modify Todo</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Configure To Do Task
-        </DialogContentText>
+  >
+    <DialogTitle>Modify Todo</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        Configure To Do Task
+      </DialogContentText>
 
-        <TextField
-          autoFocus
-          margin="dense"
-          id="taskTitle"
-          label="Todo Title"
-          type="text"
-          fullWidth
-          variant="standard"
-          required
-          value={taskTitle}
-          onChange={(e) => {
-            setTaskTitle(e.target.value);
-          }}
-        />
-        <TextField
-          autoFocus
-          margin="dense"
-          id="taskContent"
-          label="Todo Content"
-          type="text"
-          fullWidth
-          variant="standard"
-          required
-          value={taskContent}
-          onChange={(e) => {
-            setTaskContent(e.target.value);
-          }}
-        />
-        <Select
-          labelId="select-todo-status"
-          id="select-todo-status"
+      <TextField
+        autoFocus
+        margin="dense"
+        id="taskTitle"
+        label="Todo Title"
+        type="text"
+        fullWidth
+        variant="standard"
+        required
+        value={taskTitle}
+        onChange={(e) => {
+          setTaskTitle(e.target.value);
+        }}
+      />
+      <TextField
+        autoFocus
+        margin="dense"
+        id="taskContent"
+        label="Todo Content"
+        type="text"
+        fullWidth
+        variant="standard"
+        required
+        value={taskContent}
+        onChange={(e) => {
+          setTaskContent(e.target.value);
+        }}
+      />
+      <Select
+        labelId="select-todo-status"
+        id="select-todo-status"
 
-          value={taskStatus}
-          label="Select Status"
-          fullWidth
-          onChange={(e) => {
-            setTaskStatus(e.target.value);
-          }}
-        >
-          <MenuItem value={"To-Do"}>To-Do</MenuItem>
-          <MenuItem value={"Doing"}>Doing</MenuItem>
-          <MenuItem value={"Completed"}>Completed</MenuItem>
-          <MenuItem value={"Cancelled"}>Cancelled</MenuItem>
-        </Select>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-          endIcon={<Save />}
-          onClick={() => { modifyTodo(id, taskTitle, taskStatus, taskContent); handleClose() }}
-        >
-          Save
-        </Button>
-        <Button
-          size="small"
-          color="error"
-          variant="contained"
-          endIcon={<Close />}
-          onClick={handleCloseThenClear}
-        >
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+        value={taskStatus}
+        label="Select Status"
+        fullWidth
+        onChange={(e) => {
+          setTaskStatus(e.target.value);
+        }}
+      >
+        <MenuItem value={"To-Do"}>To-Do</MenuItem>
+        <MenuItem value={"Doing"}>Doing</MenuItem>
+        <MenuItem value={"Completed"}>Completed</MenuItem>
+        <MenuItem value={"Cancelled"}>Cancelled</MenuItem>
+      </Select>
+    </DialogContent>
+    <DialogActions>
+      <Button
+        size="small"
+        color="primary"
+        variant="contained"
+        endIcon={<Save />}
+        onClick={() => { modifyTodo(id, taskTitle, taskStatus, taskContent); handleClose() }}
+      >
+        Save
+      </Button>
+      <Button
+        size="small"
+        color="error"
+        variant="contained"
+        endIcon={<Close />}
+        onClick={handleCloseThenClear}
+      >
+        Close
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 }
 
 

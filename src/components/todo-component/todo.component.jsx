@@ -193,7 +193,7 @@ function Todo() {
           </CardActions>
         </Stack>
       </Card>
-    </div >
+    </div>
   );
 }
 
@@ -251,7 +251,7 @@ function AddTodoDialog(props) {
   return (
     <Dialog
       maxWidth="lg"
-      fullWidth
+      fullWidth 
       onClose={handleClose}
       open={open}
       scroll="body"
